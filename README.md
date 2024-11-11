@@ -8,7 +8,7 @@ This dataset contains information on a collection of classic literary works. It 
 - **Title**: Chronicle of chronicles
 - **Author**: Domagoj Žokalj
 - **License**: GNU GPL v3
-- **Version**: 1.0
+- **Version**: 2.0
 - **Keywords**: literature, books, classics, genres, fiction
 - **Attributes**:
   - **isbn13**: Unique identifier for each book edition in the dataset, following the 13-digit ISBN format.
@@ -23,6 +23,7 @@ This dataset contains information on a collection of classic literary works. It 
   - **language**: Original language of the book.
   - **series**: Series to which the book belongs. Empty if it's a standalone book.
 - **Intended Use**: This dataset can be used for text mining, trend analysis in literature, educational projects, or research into literary genres.
+- **encoding format**: UTF-8
 - **Date and Time Formats**: ISO 8601
 - **Language**: English
 - **Publication Date**: 2024-10-27

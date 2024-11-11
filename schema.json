@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "array",
+  "default": [],
+  "title": "Root Schema",
+  "items": {
+    "type": "object",
+    "title": "A Schema",
+    "required": [
+      "title",
+      "author",
+      "genres",
+      "year_of_original_publication",
+      "year_of_publication",
+      "isbn13",
+      "isbn10",
+      "publisher",
+      "num_of_pages",
+      "language",
+      "series"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "title": "The title Schema"
+      },
+      "author": {
+        "type": "array",
+        "title": "The author Schema",
+        "items": {
+          "type": "object",
+          "title": "A Schema",
+          "required": [
+            "name",
+            "surname"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "The name Schema"
+            },
+            "surname": {
+              "type": "string",
+              "title": "The surname Schema"
+            }
+          }
+        }
+      },
+      "genres": {
+        "type": "array",
+        "title": "The genres Schema",
+        "items": {
+          "type": "string",
+          "title": "A Schema"
+        }
+      },
+      "year_of_original_publication": {
+        "type": "integer",
+        "title": "The year_of_original_publication Schema"
+      },
+      "year_of_publication": {
+        "type": "integer",
+        "title": "The year_of_publication Schema"
+      },
+      "isbn13": {
+        "type": "string",
+        "title": "The isbn13 Schema"
+      },
+      "isbn10": {
+        "type": "string",
+        "title": "The isbn10 Schema"
+      },
+      "publisher": {
+        "type": "string",
+        "title": "The publisher Schema"
+      },
+      "num_of_pages": {
+        "type": "integer",
+        "title": "The num_of_pages Schema"
+      },
+      "language": {
+        "type": "string",
+        "title": "The language Schema"
+      },
+      "series": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "title": "The series Schema"
+      }
+    }
+  }
+}
