@@ -10,7 +10,7 @@ app.get('/data/csv', (req, res) => {
    const results = [];
    let isFirstRow = true;
 
-   fs.createReadStream('./data/podaci.csv')
+   fs.createReadStream('./data.csv')
       .pipe(csv({
          separator: ',',
          skipEmptyLines: true,
