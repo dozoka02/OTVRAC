@@ -1,0 +1,417 @@
+{
+   "openapi": "3.0.0",
+   "info": {
+      "title": "Books and Authors API",
+      "version": "1.0.0",
+      "description": "API for managing books and authors in a database."
+   },
+   "servers": [
+      {
+         "url": "http://localhost:5000",
+         "description": "Local development server"
+      }
+   ],
+   "paths": {
+      "/podaci": {
+         "get": {
+            "summary": "Retrieve all entries",
+            "description": "Fetch all books and their corresponding authors from the database.",
+            "responses": {
+               "200": {
+                  "description": "A list of books with authors",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "status": {
+                                 "type": "string"
+                              },
+                              "message": {
+                                 "type": "string"
+                              },
+                              "response": {
+                                 "type": "array",
+                                 "items": {
+                                    "type": "object"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "500": {
+                  "description": "Internal server error"
+               }
+            }
+         },
+         "post": {
+            "summary": "Add a new record",
+            "description": "Add a new book and its author to the database.",
+            "requestBody": {
+               "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "properties": {
+                           "title": {
+                              "type": "string"
+                           },
+                           "year_of_original_publication": {
+                              "type": "integer"
+                           },
+                           "year_of_publication": {
+                              "type": "integer"
+                           },
+                           "isbn13": {
+                              "type": "string"
+                           },
+                           "isbn10": {
+                              "type": "string"
+                           },
+                           "publisher": {
+                              "type": "string"
+                           },
+                           "num_of_pages": {
+                              "type": "integer"
+                           },
+                           "language": {
+                              "type": "string"
+                           },
+                           "series": {
+                              "type": "string"
+                           },
+                           "autor": {
+                              "type": "array",
+                              "items": {
+                                 "type": "object",
+                                 "properties": {
+                                    "name": {
+                                       "type": "string"
+                                    },
+                                    "surname": {
+                                       "type": "string"
+                                    }
+                                 }
+                              }
+                           },
+                           "genres": {
+                              "type": "array",
+                              "items": {
+                                 "type": "string"
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "Book added successfully",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "title": {
+                                 "type": "string"
+                              },
+                              "year_of_original_publication": {
+                                 "type": "integer"
+                              },
+                              "year_of_publication": {
+                                 "type": "integer"
+                              },
+                              "isbn13": {
+                                 "type": "string"
+                              },
+                              "isbn10": {
+                                 "type": "string"
+                              },
+                              "publisher": {
+                                 "type": "string"
+                              },
+                              "num_of_pages": {
+                                 "type": "integer"
+                              },
+                              "language": {
+                                 "type": "string"
+                              },
+                              "series": {
+                                 "type": "string"
+                              },
+                              "author_id": {
+                                 "type": "integer"
+                              },
+                              "genres": {
+                                 "type": "array",
+                                 "items": {
+                                    "type": "string"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "500": {
+                  "description": "Internal server error"
+               },
+               "404": {
+                  "description": "Author information missing"
+               },
+               "409": {
+                  "description": "Book already exists"
+               }
+            }
+         }
+      },
+      "/podaci/{id}": {
+         "get": {
+            "summary": "Retrieve a single record",
+            "description": "Fetch a specific book and its author based on the provided ISBN13.",
+            "parameters": [
+               {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "ISBN13 of the book"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Book fetched successfully",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "status": {
+                                 "type": "string"
+                              },
+                              "message": {
+                                 "type": "string"
+                              },
+                              "response": {
+                                 "type": "object"
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "404": {
+                  "description": "Book not found"
+               },
+               "500": {
+                  "description": "Internal server error"
+               }
+            }
+         },
+         "put": {
+            "summary": "Update a record",
+            "description": "Update an existing book and its author in the database.",
+            "parameters": [
+               {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "ISBN13 of the book"
+               }
+            ],
+            "requestBody": {
+               "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "properties": {
+                           "title": {
+                              "type": "string"
+                           },
+                           "year_of_original_publication": {
+                              "type": "integer"
+                           },
+                           "year_of_publication": {
+                              "type": "integer"
+                           },
+                           "isbn13": {
+                              "type": "string"
+                           },
+                           "isbn10": {
+                              "type": "string"
+                           },
+                           "publisher": {
+                              "type": "string"
+                           },
+                           "num_of_pages": {
+                              "type": "integer"
+                           },
+                           "language": {
+                              "type": "string"
+                           },
+                           "series": {
+                              "type": "string"
+                           },
+                           "autor": {
+                              "type": "array",
+                              "items": {
+                                 "type": "object",
+                                 "properties": {
+                                    "name": {
+                                       "type": "string"
+                                    },
+                                    "surname": {
+                                       "type": "string"
+                                    }
+                                 }
+                              }
+                           },
+                           "genres": {
+                              "type": "array",
+                              "items": {
+                                 "type": "string"
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "Book updated successfully"
+               },
+               "500": {
+                  "description": "Internal server error"
+               },
+               "404": {
+                  "description": "Author information missing"
+               }
+            }
+         },
+         "delete": {
+            "summary": "Delete a record",
+            "description": "Delete a specific book from the database based on the provided ISBN13.",
+            "parameters": [
+               {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "ISBN13 of the book"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Book deleted successfully"
+               },
+               "404": {
+                  "description": "Book not found"
+               },
+               "500": {
+                  "description": "Internal server error"
+               }
+            }
+         }
+      },
+      "/podaci/pretraga": {
+         "get": {
+            "summary": "Search books by title",
+            "description": "Retrieve books matching the specified title substring.",
+            "parameters": [
+               {
+                  "name": "naslov",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "Substring of the book title"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Books matching the title substring"
+               },
+               "500": {
+                  "description": "Internal server error"
+               }
+            }
+         }
+      },
+      "/podaci/autor": {
+         "get": {
+            "summary": "Search books by author",
+            "description": "Retrieve books written by a specified author.",
+            "parameters": [
+               {
+                  "name": "ime",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "First name of the author"
+               },
+               {
+                  "name": "prezime",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "Last name of the author"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Books by the specified author"
+               },
+               "500": {
+                  "description": "Internal server error"
+               }
+            }
+         }
+      },
+      "/podaci/genre/{genre}": {
+         "get": {
+            "summary": "Search books by genre",
+            "description": "Retrieve books that belong to the specified genre.",
+            "parameters": [
+               {
+                  "name": "genre",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "Genre of the books"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Books with the specified genre"
+               },
+               "404": {
+                  "description": "No books found for the specified genre"
+               },
+               "500": {
+                  "description": "Internal server error"
+               }
+            }
+         }
+      }
+   }
+}
