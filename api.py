@@ -29,7 +29,31 @@ def get_data():
         data = cur.fetchall()
         cur.close()
         conn.close()
-        return jsonify({"status": "OK", "message": "Fetched all entries", "response": data}), 200
+
+        jsonld_data = [
+            {
+                "@context": "https://schema.org/",
+                "@type": "Book",
+                "name": item['title'],
+                "author": {
+                    "@type": "Person",
+                    "name": f"{item['name']} {item['surname']}"
+                },
+                "datePublished": item['year_of_original_publication'],
+                "isbn": item['isbn13'],
+                "publisher": item['publisher'],
+                "numberOfPages": item['num_of_pages'],
+                "inLanguage": item['language'],
+                "isPartOf": {
+                    "@type": "CreativeWorkSeries",
+                    "name": item['series'] if item['series'] else None
+                },
+                "genre": item['genres']
+            }
+            for item in data
+        ]
+        
+        return jsonify({"status": "OK", "message": "Fetched all entries", "response": jsonld_data}), 200
     except Exception as e:
         return jsonify({"status": "Error", "message": str(e)}), 500
 
@@ -48,7 +72,26 @@ def get_record(id):
         conn.close()
 
         if record:
-            return jsonify({"status": "OK", "message": "Fetched entry with corresponding isbn13", "response": record}), 200
+            jsonld_item = {
+                "@context": "https://schema.org/",
+                "@type": "Book",
+                "name": record['title'],
+                "author": {
+                    "@type": "Person",
+                    "name": f"{record['name']} {record['surname']}"
+                },
+                "datePublished": record['year_of_original_publication'],
+                "isbn": record['isbn13'],
+                "publisher": record['publisher'],
+                "numberOfPages": record['num_of_pages'],
+                "inLanguage": record['language'],
+                "isPartOf": {
+                    "@type": "CreativeWorkSeries",
+                    "name": record['series'] if record['series'] else None
+                },
+                "genre": record['genres']
+            }
+            return jsonify({"status": "OK", "message": "Fetched entry with corresponding isbn13", "response": jsonld_item}), 200
         return jsonify({"status": "Not Found", "message": "Book with the provided ISBN13 doesn't exist", "response": "null"}), 404
     except Exception as e:
         return jsonify({"status": "Error", "message": str(e)}), 500
@@ -64,7 +107,31 @@ def search_books():
         records = cur.fetchall()
         cur.close()
         conn.close()
-        return jsonify({"status": "OK", "message": "Books matching search criteria", "response": records}), 200
+
+        jsonld_data = [
+            {
+                "@context": "https://schema.org/",
+                "@type": "Book",
+                "name": item['title'],
+                "author": {
+                    "@type": "Person",
+                    "name": f"{item['name']} {item['surname']}"
+                },
+                "datePublished": item['year_of_original_publication'],
+                "isbn": item['isbn13'],
+                "publisher": item['publisher'],
+                "numberOfPages": item['num_of_pages'],
+                "inLanguage": item['language'],
+                "isPartOf": {
+                    "@type": "CreativeWorkSeries",
+                    "name": item['series'] if item['series'] else None
+                },
+                "genre": item['genres']
+            }
+            for item in records
+        ]
+
+        return jsonify({"status": "OK", "message": "Books matching search criteria", "response": jsonld_data}), 200
     except Exception as e:
         return jsonify({"status": "Error", "message": str(e)}), 500
     
@@ -85,7 +152,31 @@ def get_books_by_author():
         records = cur.fetchall()
         cur.close()
         conn.close()
-        return jsonify({"status": "OK", "message": "Books by specified author", "response": records}), 200
+
+        jsonld_data = [
+            {
+                "@context": "https://schema.org/",
+                "@type": "Book",
+                "name": item['title'],
+                "author": {
+                    "@type": "Person",
+                    "name": f"{item['name']} {item['surname']}"
+                },
+                "datePublished": item['year_of_original_publication'],
+                "isbn": item['isbn13'],
+                "publisher": item['publisher'],
+                "numberOfPages": item['num_of_pages'],
+                "inLanguage": item['language'],
+                "isPartOf": {
+                    "@type": "CreativeWorkSeries",
+                    "name": item['series'] if item['series'] else None
+                },
+                "genre": item['genres']
+            }
+            for item in records
+        ]
+
+        return jsonify({"status": "OK", "message": "Books by specified author", "response": jsonld_data}), 200
     except Exception as e:
         return jsonify({"status": "Error", "message": str(e)}), 500
 
@@ -104,9 +195,32 @@ def get_books_by_genre(genre):
         records = cur.fetchall()
         cur.close()
         conn.close()
-
         if records:
-            return jsonify({"status": "OK", "message": f"Books with genre {genre}", "response": records}), 200
+            
+             jsonld_data = [
+                 {
+                     "@context": "https://schema.org/",
+                     "@type": "Book",
+                     "name": item['title'],
+                     "author": {
+                         "@type": "Person",
+                         "name": f"{item['name']} {item['surname']}"
+                     },
+                     "datePublished": item['year_of_original_publication'],
+                     "isbn": item['isbn13'],
+                     "publisher": item['publisher'],
+                     "numberOfPages": item['num_of_pages'],
+                     "inLanguage": item['language'],
+                     "isPartOf": {
+                         "@type": "CreativeWorkSeries",
+                         "name": item['series'] if item['series'] else None
+                     },
+                     "genre": item['genres']
+                 }
+                 for item in records
+             ]
+
+             return jsonify({"status": "OK", "message": f"Books with genre {genre}", "response": jsonld_data}), 200
         return jsonify({"status": "Not Found", "message": f"No books found with genre {genre}", "response": []}), 404
     except Exception as e:
         return jsonify({"status": "Error", "message": str(e)}), 500

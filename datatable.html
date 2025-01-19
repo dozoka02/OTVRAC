@@ -3,7 +3,7 @@
 
 <head>
    <meta charset="UTF-8">
-   <title>Chronicle of chronicles table</title>
+   <title>Chronicle of Chronicles Table</title>
    <style>
       table {
          width: 100%;
@@ -33,7 +33,7 @@
 
 <body>
 
-   <h1>Filter results</h1>
+   <h1>Filter Results</h1>
    <form id="filter-form">
       <input type="text" id="search" placeholder="Search...">
       <select id="attribute">
@@ -41,18 +41,16 @@
          <option value="title">Title</option>
          <option value="author">Author</option>
          <option value="genres">Genres</option>
-         <option value="year_of_original_publication">Year of original publication</option>
-         <option value="year_of_publication">Year of publication</option>
+         <option value="year_of_original_publication">Year of Original Publication</option>
+         <option value="year_of_publication">Year of Publication</option>
          <option value="isbn13">ISBN13</option>
          <option value="isbn10">ISBN10</option>
          <option value="publisher">Publisher</option>
-         <option value="num_of_pages">Num of pages</option>
+         <option value="num_of_pages">Number of Pages</option>
          <option value="language">Language</option>
          <option value="series">Series</option>
       </select>
       <button type="button" onclick="fetchData()">Filter</button>
-      <button type="button" onclick="downloadCSV()">Download result as CSV</button>
-      <button type="button" onclick="downloadJSON()">Download result as JSON</button>
    </form>
 
    <table id="data-table">
@@ -61,12 +59,12 @@
             <th>Title</th>
             <th>Author</th>
             <th>Genres</th>
-            <th>Year of original publication</th>
-            <th>Year of publication</th>
+            <th>Year of Original Publication</th>
+            <th>Year of Publication</th>
             <th>ISBN13</th>
             <th>ISBN10</th>
             <th>Publisher</th>
-            <th>Num of pages</th>
+            <th>Number of Pages</th>
             <th>Language</th>
             <th>Series</th>
          </tr>
@@ -75,83 +73,43 @@
    </table>
 
    <script>
-      let currentData = [];
-
-      function fetchData() {
+      async function fetchData() {
          const search = document.getElementById('search').value.toLowerCase();
          const attribute = document.getElementById('attribute').value;
 
-         fetch('/data/csv')
-            .then(response => response.json())
-            .then(data => {
-               currentData = data.filter(item => {
-                  if (attribute && item[attribute]) {
-                     return item[attribute].toString().toLowerCase().includes(search);
-                  } else {
-                     return Object.keys(item).some(key =>
-                        item[key] && item[key].toString().toLowerCase().includes(search)
-                     );
-                  }
-               });
-
-               renderTable(currentData);
-            })
-            .catch(error => console.error('Error:', error));
+         try {
+            const response = await fetch(`/fetch-data?search=${encodeURIComponent(search)}&attribute=${encodeURIComponent(attribute)}`);
+            const data = await response.json();
+            renderTable(data);
+         } catch (error) {
+            console.error('Error fetching data:', error);
+         }
       }
 
       function renderTable(data) {
          const tableBody = document.querySelector('#data-table tbody');
          tableBody.innerHTML = '';
+
          data.forEach(item => {
-            const row = `<tr>
-                <td>${item.title}</td>
-                <td>${item.author}</td>
-                <td>${item.genres.join(', ')}</td>
-                <td>${item.year_of_original_publication}</td>
-                <td>${item.year_of_publication}</td>
-                <td>${item.isbn13}</td>
-                <td>${item.isbn10}</td>
-                <td>${item.publisher}</td>
-                <td>${item.num_of_pages}</td>
-                <td>${item.language}</td>
-                <td>${item.series || ''}</td>
-            </tr>`;
+            const row = `
+               <tr>
+                  <td>${item.title}</td>
+                  <td>${item.author}</td>
+                  <td>${item.genres.join(', ')}</td>
+                  <td>${item.year_of_original_publication}</td>
+                  <td>${item.year_of_publication}</td>
+                  <td>${item.isbn13}</td>
+                  <td>${item.isbn10}</td>
+                  <td>${item.publisher}</td>
+                  <td>${item.num_of_pages}</td>
+                  <td>${item.language}</td>
+                  <td>${item.series || ''}</td>
+               </tr>`;
             tableBody.innerHTML += row;
          });
       }
 
-      function downloadCSV() {
-         if (currentData.length === 0) return alert('Nema podataka za preuzimanje');
-
-         const csvRows = [];
-         const headers = Object.keys(currentData[0]);
-         csvRows.push(headers.join(','));
-
-         currentData.forEach(item => {
-            const values = headers.map(header => `"${item[header] || ''}"`);
-            csvRows.push(values.join(','));
-         });
-
-         const csvContent = csvRows.join('\n');
-         const blob = new Blob([csvContent], { type: 'text/csv' });
-         const link = document.createElement('a');
-         link.href = URL.createObjectURL(blob);
-         link.download = 'filtered_data.csv';
-         link.click();
-      }
-
-      function downloadJSON() {
-         if (currentData.length === 0) return alert('Nema podataka za preuzimanje');
-
-         const jsonContent = JSON.stringify(currentData, null, 2);
-         const blob = new Blob([jsonContent], { type: 'application/json' });
-         const link = document.createElement('a');
-         link.href = URL.createObjectURL(blob);
-         link.download = 'filtered_data.json';
-         link.click();
-      }
-
-      fetchData();
+      fetchData(); // Initial fetch to populate the table
    </script>
 
 </body>

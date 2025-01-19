@@ -8,15 +8,42 @@
 </head>
 
 <body>
-   <p>
-      <a href="/data.csv" download>Download data as CSV</a>
-   </p>
-   <p>
-      <a href="/data.json" download>Download data as JSON</a>
-   </p>
-   <p>
-      <a href="datatable.html">Show data in table</a>
-   </p>
+   <div id="unauthenticated">
+      <p>
+         <button onclick="window.location.href='/login';">Prijava</button>
+      </p>
+   </div>
+
+   <div id="authenticated" style="display: none;">
+      <p>
+         <button onclick="window.location.href='/generate-csv';">Generate and Download CSV</button>
+      </p>
+      <p>
+         <button onclick="window.location.href='/generate-json';">Generate and Download JSON</button>
+      </p>
+      <p>
+         <a href="datatable.html">Show data in table</a>
+      </p>
+      <p>
+         <button onclick="window.location.href='/logout';">Odjava</button>
+      </p>
+   </div>
+
+   <script>
+      // Provjera je li korisnik prijavljen - dohvaća se status s backenda
+      fetch('/auth-status')
+         .then(response => response.json())
+         .then(data => {
+            if (data.authenticated) {
+               document.getElementById('authenticated').style.display = 'block';
+               document.getElementById('unauthenticated').style.display = 'none';
+            } else {
+               document.getElementById('authenticated').style.display = 'none';
+               document.getElementById('unauthenticated').style.display = 'block';
+            }
+         })
+         .catch(err => console.error('Error fetching auth status:', err));
+   </script>
 </body>
 
 </html>
